@@ -1,35 +1,73 @@
+import React from "react";
 
-const Comment=({data})=>{
-    const {name,text,replies}=data;
-    return (
-        <div className="flex bg-slate-200 p-5 m-5 rounded-lg">
-            
-            <div><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmCS3uMVc54NYJHXFUSIUFZrI3Zp00EZ6KcA&s" alt="logo"  className="h-8 w-8"/></div>
-            <div className="p-3">
-                <p className=" font-bold">name</p>
-                <p>comments</p>
-            </div>
-        </div>
-    )
-}
+let comments = [
+  {
+    id: 1,
+    name: "John Doe",
+    text: "This is a comment.",
+    replies: [
+      {
+        id: 2,
+        name: "Jane Smith",
+        text: "This is a reply to the comment.",
+        replies: [
+          {
+            id: 3,
+            name: "John Doe",
+            text: "This is a nested reply.",
+            replies: [],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: "Alice Johnson",
+    text: "This is another comment.",
+    replies: [],
+  },
+];
 
-
-const CommentList=({comments})=>{
-    return comments.map((el)=>(<div key={el.id} >
-    <Comment key={el.id} data={el}/>
-    <div>
-        <CommentList key={el.id} comments={el.replies}/>
-    </div>
-    </div>))
-}
-const CommentConatiners = () => {
+const Comment = ({ data }) => {
+  const { name, text, replies } = data;
   return (
-    <div className='m-5 p-5'>
-
-      <h1 className='text-2xl font-bold'>Comments:</h1>
-      <CommentList comments={""}/>
+    <div className="flex flex-col sm:flex-row bg-slate-200 p-4 m-3 rounded-lg shadow-md">
+      <div className="flex-shrink-0">
+        <img
+          src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmCS3uMVc54NYJHXFUSIUFZrI3Zp00EZ6KcA&s"
+          alt="logo"
+          className="h-12 w-12 rounded-full"
+        />
+      </div>
+      <div className="ml-4 mt-2 sm:mt-0 p-3 bg-white rounded-lg shadow-sm w-full">
+        <p className="font-bold text-lg">{name}</p>
+        <p className="mt-2 text-gray-600">{text}</p>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default CommentConatiners
+const CommentList = ({ comments }) => {
+  return comments.map((el) => (
+    <div key={el.id} className="ml-0 sm:ml-8">
+      <Comment data={el} />
+      {el.replies && el.replies.length > 0 && (
+        <div className="ml-4 sm:ml-8">
+          <CommentList comments={el.replies} />
+        </div>
+      )}
+    </div>
+  ));
+};
+
+const CommentContainers = () => {
+  return (
+    <div className="m-5 p-5 bg-gray-100 rounded-lg shadow-lg ">
+      <h1 className="text-3xl font-bold mb-5">Comments:</h1>
+      <CommentList comments={comments} />
+    </div>
+  );
+};
+
+export default CommentContainers;
