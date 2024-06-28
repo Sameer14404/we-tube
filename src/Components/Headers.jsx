@@ -3,22 +3,20 @@ import { toggleMenu } from "../utils/appSlice";
 import { useEffect, useState } from "react";
 import { SEARCH_SUGGESTION_API } from "../utils/Constant";
 import { cache } from "../utils/searchSlice";
-import store from "../utils/store";
-
+import { Link } from "react-router-dom";
 const Headers = () => {
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const check=useSelector(store=>store.search)
+  const cachedSuggestions = useSelector((store) => store.search);
 
   useEffect(() => {
     const apiMakeTime = setTimeout(() => {
-      if (check[searchQuery]) {
-        setSuggestions(check[searchQuery])
-      }
-      else{
-        getSearchSuggestions()
+      if (cachedSuggestions[searchQuery]) {
+        setSuggestions(cachedSuggestions[searchQuery]);
+      } else {
+        getSearchSuggestions();
       }
     }, 200);
     return () => {
@@ -30,7 +28,7 @@ const Headers = () => {
     const data = await fetch(`${SEARCH_SUGGESTION_API}${searchQuery}`);
     const json = await data.json();
     setSuggestions(json[1]);
-    dispatch(cache({[searchQuery]:suggestions}))
+    dispatch(cache({ [searchQuery]: suggestions }));
   };
 
   const handleMenu = () => {
@@ -38,51 +36,50 @@ const Headers = () => {
   };
 
   return (
-    <div className="grid grid-flow-col p-5 m-3 shadow-lg">
-      <div className="flex col-span-1">
+    <div className="flex items-center justify-between p-4 bg-white shadow-lg fixed w-full z-50">
+      <div className="flex items-center space-x-4">
         <img
           src="https://cdn.iconscout.com/icon/free/png-256/free-hamburger-menu-462145.png?f=webp&w=256"
           alt="menu-img"
-          className="h-9 cursor-pointer"
+          className="h-8 cursor-pointer transition-transform transform hover:scale-110"
           onClick={handleMenu}
         />
         <img
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSh8xEWKiTMYig_ewmAgDobsw_ddFKZe0iO-A&s"
           alt="youtube-logo"
-          className="h-9 mx-2"
+          className="h-8 transition-transform transform hover:scale-110"
         />
       </div>
-      <div className="col-span-10 relative flex justify-center">
-        <div className="w-full max-w-md relative">
-          <input
-            type="text"
-            className="w-full h-10 rounded-l-full border border-gray-400 pl-4 pr-10 focus:outline-none"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onFocus={() => setShowSuggestions(true)}
-            onBlur={() => setShowSuggestions(false)}
-          />
-          <button className="absolute right-0 top-0 h-full bg-gray-500 rounded-r-full px-4 text-white">
-            Search
-          </button>
-          {showSuggestions && searchQuery && (
-            <div className="absolute top-12 left-0 right-0 border border-gray-400 py-2 shadow-lg rounded-lg bg-white z-10">
-              <ul>
-                {suggestions.map((el) => (
-                  <li key={el} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    {el}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
+      <div className="relative flex-grow mx-4">
+        <input
+          type="text"
+          className="w-full h-10 rounded-full border border-gray-300 pl-4 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          onFocus={() => setShowSuggestions(true)}
+          onBlur={() => setShowSuggestions(false)}
+          placeholder="Search"
+        />
+        <button className="absolute right-0 top-0 h-full px-4 text-white bg-blue-500 rounded-r-full transition-colors hover:bg-blue-600">
+          Search
+        </button>
+        {showSuggestions && searchQuery && (
+          <div className="absolute top-12 left-0 right-0 border border-gray-300 bg-white shadow-lg rounded-lg z-10">
+            <ul>
+              {suggestions.map((el) => (
+                <li key={el} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                  {el}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
-      <div className="col-span-1 flex justify-end items-center">
+      <div className="flex items-center space-x-4">
         <img
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmCS3uMVc54NYJHXFUSIUFZrI3Zp00EZ6KcA&s"
-          alt=""
-          className="h-9"
+          alt="user-avatar"
+          className="h-8 w-8 rounded-full"
         />
       </div>
     </div>

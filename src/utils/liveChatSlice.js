@@ -11,7 +11,8 @@ const LiveChatSlice=createSlice({
     },
     reducers:{
         addMessage:(state,action)=>{
-         state.messages.push(action.payload)
+            
+         state.messages.push(action.payload);
         }
     }
 })
