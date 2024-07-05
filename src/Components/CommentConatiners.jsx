@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 let comments = [
   {
@@ -31,8 +32,9 @@ let comments = [
 
 const Comment = ({ data }) => {
   const { name, text, replies } = data;
+  const isDark=useSelector((store)=>store.app.isDark)
   return (
-    <div className="flex flex-col sm:flex-row bg-slate-200 p-4 m-3 rounded-lg shadow-md">
+    <div className={`flex flex-col sm:flex-row ${isDark?"bg-black":"bg-slate-200"} p-4 m-3 rounded-lg shadow-md`}>
       <div className="flex-shrink-0">
         <img
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSmCS3uMVc54NYJHXFUSIUFZrI3Zp00EZ6KcA&s"

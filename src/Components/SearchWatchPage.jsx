@@ -8,19 +8,19 @@ import CommentContainers from "./CommentConatiners";
 import SearchResults from "./SearchResult";
 
 
-const WatchPage = () => {
+const SearchWatchPage = () => {
   const { id } = useParams();
-
+const navigate=useNavigate()
   const dispatch = useDispatch();
 
   const query=useSelector((store)=>store.filter.Params)
   const isDark=useSelector((store)=>store.app.isDark)
   useEffect(() => {
     dispatch(closeMenu());
-  }, [id,]);
-if(query!=""){
-  return <SearchResults/>
-}
+  
+  }, [id,query]);
+
+
   return (
     <div className={`flex flex-col lg:flex-row p-5 space-y-5 lg:space-y-0 lg:space-x-5 w-full ${isDark?"bg-black":"bg-white"}`}>
       <div className="flex-1">
@@ -43,4 +43,4 @@ if(query!=""){
   );
 };
 
-export default WatchPage;
+export default SearchWatchPage;

@@ -6,7 +6,7 @@ import ChatMessage from "./ChatMessage";
 
 const LiveChat = () => {
     const dispatch = useDispatch();
-    const messages = useSelector((store) => store.chat.messages.slice(-10));
+    const messages = useSelector((store) => store.chat.messages);
     const chatEndRef = useRef(null);
     const [chatInput, setChatInput] = useState("");
 
