@@ -11,44 +11,56 @@ const MainContainer = lazy(() => import("./Components/MainContainer"));
 const WatchPage = lazy(() => import("./Components/WatchPage"));
 const SearchResults = lazy(() => import("./Components/SearchResult"));
 
-function App() {
-  const AppRouter = createBrowserRouter([
-    {
-      path: "/",
-      element:(<>
-      <Headers/>
-      <Body/>
-      </>),
-      children: [
-        {
-          path: "/",
-          element: <MainContainer />,
-        },
-        {
-          path: "/watch/v/:id",
-          element: <WatchPage />,
-        },
-        {
-          path: "/search",
-          element: <SearchResults />,
-        },
-      
-        {
-          path: "/watch/v/search/:id",
-          element: <SearchWatchPage />,
-        },
-       
-
-      ],
-    },
-  ]);
-
-  return (
-    <Provider store={store}>
+const AppRouter = createBrowserRouter([
+  {
+    path: "/",
+    element: (
       <Suspense fallback={<div>Loading...</div>}>
         <Headers />
-        <RouterProvider router={AppRouter} />
+        <Body />
       </Suspense>
+    ),
+    children: [
+      {
+        path: "/",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <MainContainer />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/watch/v/:id",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <WatchPage />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/search",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <SearchResults />
+          </Suspense>
+        ),
+      },
+      {
+        path: "/watch/v/search/:id",
+        element: (
+          <Suspense fallback={<div>Loading...</div>}>
+            <SearchWatchPage />
+          </Suspense>
+        ),
+      },
+    ],
+  },
+]);
+
+function App() {
+  return (
+    <Provider store={store}>
+      <RouterProvider router={AppRouter} />
     </Provider>
   );
 }
