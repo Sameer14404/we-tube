@@ -4,4 +4,4 @@
 
  export const SEARCH_API=`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=surfing&key=${apiKey}&q=`
 
-export const SEARCH_SUGGESTION_API="https://suggestqueries.google.com/complete/search?client=firefox&q="
+export const SEARCH_SUGGESTION_API="http://suggestqueries.google.com/complete/search?client=firefox&q="

@@ -39,8 +39,12 @@ const Headers = () => {
   }, [searchQuery]);
 
   const getSearchSuggestions = async () => {
-    const data = await fetch(`${SEARCH_SUGGESTION_API}${searchQuery}`);
-    const json = await data.json();
+    const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(SEARCH_SUGGESTION_API + searchQuery)}`);
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    const json = JSON.parse(data.contents);  // Parsing the content from the proxy response
     setSuggestions(json[1]);
     setQuery(searchQuery);
     dispatch(cache({ [searchQuery]: json[1] }));
